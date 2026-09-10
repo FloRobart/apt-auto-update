@@ -2,7 +2,7 @@
 Name=Mise à jour des paquets
 Comment=Vérifier et installer les mises à jour logicielles
 Exec=/usr/bin/apt-auto-update
-Icon=system-software-update
+Icon=software-update-available
 Terminal=false
 Type=Application
 Categories=System;Settings;
