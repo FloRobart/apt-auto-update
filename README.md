@@ -6,6 +6,8 @@
     - [Table des matières](#table-des-matières)
     - [Description](#description)
     - [Installation](#installation)
+        - [Installation via le dépôt APT](#installation-via-le-dépôt-apt)
+        - [Installation via le fichier `.deb`](#installation-via-le-fichier-deb)
     - [Désinstallation](#désinstallation)
 
 ## Description
@@ -20,11 +22,33 @@ Vous pouvez également lancer manuellement à tout moment la vérification des m
 
 ## Installation
 
+### Installation via le dépôt APT
+
+- Téléchargez et exécutez le script d'installation `install.sh` :
+
+```bash
+curl -fsSL https://FloRobart.github.io/apt-auto-update/install.sh | sudo bash
+```
+
+- Vous pouvez supprimer le fichier `install.sh` après l'installation si vous le souhaitez.
+
+```bash
+rm install.sh
+```
+
+### Installation via le fichier `.deb`
+
 - Téléchargez le fichier `apt-auto-update.deb` depuis la page des [releases]()
 - Installez le paquet avec la commande suivante :
 
 ```bash
 sudo apt install ./apt-auto-update.deb
+```
+
+- Vous pouvez supprimer le fichier `apt-auto-update.deb` après l'installation si vous le souhaitez.
+
+```bash
+rm apt-auto-update.deb
 ```
 
 ## Désinstallation
