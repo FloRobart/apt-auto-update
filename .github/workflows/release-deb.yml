@@ -34,7 +34,7 @@ jobs:
       - name: Build Debian package
         run: |
           chmod +x ./build-deb.sh
-          ./build-deb.sh
+          bash -x ./build-deb.sh
 
       - name: Create GitHub Release and Upload Deb
         uses: softprops/action-gh-release@v2
