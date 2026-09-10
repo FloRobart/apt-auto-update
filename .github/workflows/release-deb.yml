@@ -33,6 +33,7 @@ jobs:
 
       - name: Build Debian package
         run: |
+          ls -la
           chmod +x ./build-deb.sh
           bash -x ./build-deb.sh
 
