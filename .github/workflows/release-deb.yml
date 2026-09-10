@@ -47,34 +47,56 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to APT Repository (GitHub Pages)
-        uses: anton-yurchenko/git-release-apt-repo@v0.1.2
-        if: env.HAS_GPG == 'true'
+      - name: Generate APT repository and publish to GitHub Pages
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          HAS_GPG: ${{ secrets.GPG_PRIVATE_KEY != '' }}
-        with:
-          file: apt-auto-update.deb
-          repo: ${{ github.repository }}
-          branch: gh-pages
-
-      - name: Deploy install.sh to GitHub Pages
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Clone uniquement la branche gh-pages
-          git clone --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages-branch
-          
-          # Copie le script d'installation à la racine
-          cp install.sh gh-pages-branch/install.sh
-          
-          cd gh-pages-branch
-          git add install.sh
-          # Commit et push uniquement s'il y a des modifications
-          if ! git diff-index --quiet HEAD; then
-            git commit -m "docs: mise à jour de install.sh pour GitHub Pages"
-            git push origin gh-pages
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq apt-utils gpg git
+
+          # 1. Préparation de l'arborescence du dépôt APT
+          mkdir -p repo/dists/stable/main/binary-amd64
+          mkdir -p repo/pool/main
+
+          # Copie du binaire .deb dans le pool
+          cp apt-auto-update.deb repo/pool/main/
+
+          cd repo
+
+          # 2. Génération de Packages et Packages.gz
+          apt-ftparchive packages pool/main > dists/stable/main/binary-amd64/Packages
+          gzip -k -f dists/stable/main/binary-amd64/Packages
+
+          # 3. Génération du fichier Release
+          apt-ftparchive release dists/stable > dists/stable/Release
+
+          # 4. Importation de la clé GPG et signature du dépôt
+          if [ -n "$GPG_PRIVATE_KEY" ]; then
+            echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+
+            # Export de la clé publique pour les clients
+            KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/sec/{print $2}' | cut -d'/' -f2 | head -n1)
+            gpg --armor --export "$KEY_ID" > public.key
+
+            # Signature du fichier Release (InRelease et Release.gpg)
+            PASSPHRASE_OPT=""
+            if [ -n "$GPG_PASSPHRASE" ]; then
+              PASSPHRASE_OPT="--pinentry-mode loopback --passphrase $GPG_PASSPHRASE"
+            fi
+
+            gpg --batch --yes $PASSPHRASE_OPT --clearsign -o dists/stable/InRelease dists/stable/Release
+            gpg --batch --yes $PASSPHRASE_OPT -abs -o dists/stable/Release.gpg dists/stable/Release
           fi
+
+          # 5. Ajout du script install.sh à la racine du site
+          cp ../install.sh ./install.sh
+
+          # 6. Déploiement propre sur la branche gh-pages
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b gh-pages
+          git add .
+          git commit -m "Deploy APT repository and install.sh"
+          git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
