@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+# Permissions strictes obligatoires pour sudoers
+chmod 0440 /etc/sudoers.d/apt-auto-update
+
+# Active le timer par défaut pour toutes les sessions utilisateurs
+systemctl --global enable apt-auto-update.timer 2>/dev/null || true
+
+exit 0

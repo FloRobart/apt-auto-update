@@ -1,0 +1,11 @@
+[Unit]
+Description=Vérification silencieuse des mises à jour utilisateur
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+# Importe les variables de bus et d'affichage graphique de la session active
+Environment=DISPLAY=:0
+PassEnvironment=DISPLAY WAYLAND_DISPLAY DBUS_SESSION_BUS_ADDRESS XAUTHORITY
+ExecStart=/usr/bin/apt-auto-update --boot

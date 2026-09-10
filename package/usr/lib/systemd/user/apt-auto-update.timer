@@ -1,0 +1,10 @@
+[Unit]
+Description=Vérification discrète des mises à jour (démarrage + tous les 7 jours)
+PartOf=graphical-session.target
+
+[Timer]
+OnStartupSec=2min
+OnUnitActiveSec=7d
+
+[Install]
+WantedBy=timers.target
