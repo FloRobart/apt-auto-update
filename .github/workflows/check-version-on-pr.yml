@@ -1,0 +1,46 @@
+name: Check Version on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  verify-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract package version from control file
+        id: pkg_version
+        run: |
+          VERSION=$(grep '^Version:' package/DEBIAN/control | awk '{print $2}' | tr -d ' \r\n')
+          if [ -z "$VERSION" ]; then
+            echo "Erreur : Impossible de trouver le champ 'Version:' dans package/DEBIAN/control" >&2
+            exit 1
+          fi
+          echo "CURRENT_VERSION=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Version trouvée dans le paquet : ${VERSION}"
+
+      - name: Fetch latest GitHub release version
+        id: latest_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST_TAG=$(gh release view --repo "${{ github.repository }}" --json tagName -q .tagName 2>/dev/null || echo "")
+          LATEST_VERSION="${LATEST_TAG#v}"
+          echo "LATEST_VERSION=${LATEST_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Dernière version publiée : ${LATEST_VERSION:-aucune}"
+
+      - name: Compare versions
+        run: |
+          CURRENT="${{ steps.pkg_version.outputs.CURRENT_VERSION }}"
+          LATEST="${{ steps.latest_release.outputs.LATEST_VERSION }}"
+
+          if [ -n "$LATEST" ] && [ "$CURRENT" = "$LATEST" ]; then
+            echo "::error file=package/DEBIAN/control::La version ($CURRENT) n'a pas été incrémentée par rapport à la dernière release ($LATEST)."
+            exit 1
+          fi
+
+          echo "Validation réussie : la version $CURRENT est prête pour la publication."

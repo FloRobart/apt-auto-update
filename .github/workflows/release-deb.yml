@@ -1,0 +1,80 @@
+name: Build and Publish Debian Package
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract version from control file
+        id: get_version
+        run: |
+          VERSION=$(grep '^Version:' package/DEBIAN/control | awk '{print $2}' | tr -d ' \r\n')
+          if [ -z "$VERSION" ]; then
+            echo "Erreur : Champ 'Version:' introuvable dans package/DEBIAN/control" >&2
+            exit 1
+          fi
+          echo "VERSION=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "TAG=v${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Version cible : ${VERSION}"
+
+      - name: Build Debian package
+        run: |
+          chmod +x ./build-deb.sh
+          ./build-deb.sh
+
+      - name: Create GitHub Release and Upload Deb
+        uses: softprops/action-gh-release@v2
+        with:
+          files: apt-auto-update.deb
+          tag_name: ${{ steps.get_version.outputs.TAG }}
+          name: Release ${{ steps.get_version.outputs.TAG }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to APT Repository (GitHub Pages)
+        uses: anton-yurchenko/git-release-apt-repo@v0.1.2
+        if: env.HAS_GPG == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          HAS_GPG: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        with:
+          file: apt-auto-update.deb
+          repo: ${{ github.repository }}
+          branch: gh-pages
+
+      - name: Deploy install.sh to GitHub Pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Clone uniquement la branche gh-pages
+          git clone --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages-branch
+          
+          # Copie le script d'installation à la racine
+          cp install.sh gh-pages-branch/install.sh
+          
+          cd gh-pages-branch
+          git add install.sh
+          # Commit et push uniquement s'il y a des modifications
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "docs: mise à jour de install.sh pour GitHub Pages"
+            git push origin gh-pages
+          fi
