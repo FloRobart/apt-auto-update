@@ -1,0 +1,16 @@
+Package: apt-auto-update
+Architecture: all
+Version: 1.0.2
+Priority: optional
+Section: admin
+Maintainer: FloRobart <florobart.github@gmail.com>
+Depends: bash, sudo, zenity, libnotify-bin
+Filename: pool/main/apt-auto-update.deb
+Size: 3028
+MD5sum: 690a7bb7ceeb78cbb18900c25d8048d5
+SHA1: ebdc6e7649d558597d887a3b21e6f7b46d6da68f
+SHA256: 416f2afa3d6e1f37744aac7402f3ab74acc4082a4c73e2238bec0850ad5a056c
+SHA512: 7079f4e8beced3650d3d2613ff1f59958eeae3e65587b9416b5afbcf82f6a8eeaf0122a9fb26cfaba5635220c21d2ee2d9d511a6951dbb437f1dcb5fa2e562f2
+Description: Outil graphique de mise à jour des paquets APT
+ Notifie discrètement les mises à jour et guide l'utilisateur pas à pas avec Zenity.
+
