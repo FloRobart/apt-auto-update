@@ -9,7 +9,7 @@ curl -fsSL https://FloRobart.github.io/apt-auto-update/public.key | gpg --dearmo
 chmod 644 /etc/apt/keyrings/apt-auto-update.gpg
 
 # 3. Ajout du dépôt
-echo "deb [signed-by=/etc/apt/keyrings/apt-auto-update.gpg] https://FloRobart.github.io/apt-auto-update stable main" > /etc/apt/sources.list.d/apt-auto-update.list
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/apt-auto-update.gpg] https://FloRobart.github.io/apt-auto-update stable main" > /etc/apt/sources.list.d/apt-auto-update.list
 chmod 644 /etc/apt/sources.list.d/apt-auto-update.list
 
 # 4. Installation silencieuse sans interruption

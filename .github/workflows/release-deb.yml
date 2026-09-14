@@ -70,7 +70,8 @@ jobs:
           gzip -k -f dists/stable/main/binary-amd64/Packages
 
           # 3. Génération du fichier Release
-          apt-ftparchive release dists/stable > dists/stable/Release
+          # apt-ftparchive release dists/stable > dists/stable/Release
+          apt-ftparchive -o APT::FTPArchive::Release::Suite="stable" -o APT::FTPArchive::Release::Codename="stable" release dists/stable > dists/stable/Release
 
           # 4. Importation de la clé GPG et signature du dépôt
           if [ -n "$GPG_PRIVATE_KEY" ]; then
