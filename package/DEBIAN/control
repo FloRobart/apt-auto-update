@@ -1,9 +1,9 @@
 Package: apt-auto-update
-Version: 1.0.2
+Version: 1.1.0
 Section: admin
 Priority: optional
 Architecture: all
-Depends: bash, sudo, zenity, libnotify-bin
+Depends: bash, sudo, yad, libnotify-bin
 Maintainer: FloRobart <florobart.github@gmail.com>
 Description: Outil graphique de mise à jour des paquets APT
- Notifie discrètement les mises à jour et guide l'utilisateur pas à pas avec Zenity.
+ Notifie discrètement les mises à jour et guide l'utilisateur pas à pas avec yad.
