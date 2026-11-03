@@ -1,0 +1,21 @@
+Architectures: all amd64 arm64 armel armhf i386 ppc64el riscv64 s390x
+Codename: stable
+Components: main
+Date: Tue, 03 Nov 2026 11:55:37 +0000
+Suite: stable
+MD5Sum:
+ 43e99ca97ccc3ad815a254dc41755b00              156 Release
+ 049b0e6e2eed308ac4d9fb2b83e19285              679 main/binary-all/Packages
+ 0b9fa9bda5237b9d46a823a36f1ede48              505 main/binary-all/Packages.gz
+SHA1:
+ f0af39e8aa68c5c4cec826d520238a2ec9d38d02              156 Release
+ 21b4f6c8c971c15a51117a18b9ab0d93d9162229              679 main/binary-all/Packages
+ f4ef9790eaf4e666e9481012c2523a2e679907fb              505 main/binary-all/Packages.gz
+SHA256:
+ 658a4fb0d87a4cd237d4154d39a5685e18d9a875c25da0d998eb23afa8b81eaf              156 Release
+ 454196df43b5515a9280cde96efa8083b4bf1796636b20cc1db63f2c48cc8114              679 main/binary-all/Packages
+ ba9c2288dc6993b89f9c09f0a7c2a89d3ad36e9820e8c8dcfc9ad2ba487866eb              505 main/binary-all/Packages.gz
+SHA512:
+ 3065ac39b0d9e64ee6f547220e8020635ed85aaa8a9a5cfac0aed47d1557bc0ff445781440fd03acaef850cf0fbc7a417b7aa3cae67b92d280c4ddf8a7a76ccb              156 Release
+ 307491156469a23ac7431a9230aa42b9225edb02d02c6b1902e04cdf8413582d932ab7430da4594f4d1f4ac692229e94a705da5b38463ca0e3e02b4a1ce46ca1              679 main/binary-all/Packages
+ 7bf8324d5accbb184010308799162de09f3380fed15261aff4a6ac2c5c4c22d017649d87c1e3e0e0561138135df4c064373f82374e4cb558ddf3518759dba497              505 main/binary-all/Packages.gz

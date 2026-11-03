@@ -1,0 +1,16 @@
+Package: apt-auto-update
+Architecture: all
+Version: 1.1.1
+Priority: optional
+Section: admin
+Maintainer: FloRobart <florobart.github@gmail.com>
+Depends: bash, sudo, yad, libnotify-bin
+Filename: pool/main/apt-auto-update.deb
+Size: 4578
+MD5sum: f8390792e85335b78de94bd7e96c1f62
+SHA1: de668b04bc949e17592f0b185c87ad04e25cd82c
+SHA256: 0cd2ca8e3b1f05d862ff94a14ecb4bb94cc29ffb89b72ed9fc2716f6953b1441
+SHA512: de29016b0fa3230e9dbf0a821a2f0fabbdaec67353dd994061e8561e8f0f0a5d8bcd9b691652363718b1a178c266dfd7ce9e4360bfb315d269ae488c1de02408
+Description: Outil graphique de mise à jour des paquets APT
+ Notifie discrètement les mises à jour et guide l'utilisateur pas à pas avec yad.
+
