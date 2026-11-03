@@ -16,7 +16,7 @@ APT auto update est une application graphique simple et intuitive qui permet de 
 
 Elle vous avertit lorsque des mises à jour sont disponibles et vous permet de les installer facilement en un seul clic.
 
-Elle vérifie à chaque démarrage et une fois par semaine si des mises à jour sont disponibles et vous en informe par une notification.
+Elle vérifie à chaque démarrage et tous les deux jours si des mises à jour sont disponibles et vous en informe par une notification.
 
 Vous pouvez également lancer manuellement à tout moment la vérification des mises à jour via la commande `apt-auto-update` ou directement depuis la liste des applications.
 

@@ -1,10 +1,17 @@
 [Unit]
-Description=Vérification discrète des mises à jour (démarrage + tous les 7 jours)
+Description=Vérification discrète des mises à jour (démarrage + tous les 2 jours)
 PartOf=graphical-session.target
 
 [Timer]
-OnStartupSec=2min
-OnUnitActiveSec=7d
+# Only place where the delay before the first check after login is set:
+# it leaves time for the network and the desktop session to be ready
+OnStartupSec=1min
+
+# Every 2 calendar days (odd days of the month), at 10 a.m. Unlike "OnUnitActiveSec",
+# this is wall-clock time: days spent in suspend count, and a check missed while
+# suspended runs at wake-up. "Persistent" is not used on purpose: the check at login
+# above already covers the time the computer was off, and it would skip its delay.
+OnCalendar=*-*-1/2 10:00:00
 
 [Install]
 WantedBy=timers.target

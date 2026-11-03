@@ -150,14 +150,6 @@ run_full_gui() {
 
 # --- Mode silencieux / vérification d'arrière-plan ---
 check_and_notify() {
-    # Récupère le premier argument (le délai en secondes), par défaut 0 si non renseigné
-    local timer="${1:-0}"
-
-    # Si le timer est supérieur à 0, on attend
-    if [ "$timer" -gt 0 ]; then
-        sleep "$timer"
-    fi
-
     sudo apt update >/dev/null 2>&1
 
     # Compte le nombre de paquets à jour
@@ -182,12 +174,11 @@ check_and_notify() {
 }
 
 # --- Point d'entrée ---
-if [ "$1" == "--check" ]; then
+# The delay before the check at login is set by the systemd timer (OnStartupSec), not here.
+# "--boot" is the option used by the service up to version 1.1.0: it is still accepted so that
+# a session that has kept this old service loaded doesn't open the full window instead.
+if [ "$1" == "--check" ] || [ "$1" == "--boot" ]; then
     check_and_notify
 else
-    if [ "$1" == "--boot" ]; then
-        check_and_notify 30
-    else
-        run_full_gui
-    fi
+    run_full_gui
 fi
