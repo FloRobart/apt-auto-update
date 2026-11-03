@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Height (in pixels) of the "Détails" area once opened
-readonly DETAILS_AREA_HEIGHT=600
+readonly DETAILS_AREA_HEIGHT=400
 
 # --- Function: open a yad window, always centered and with the same look as the others ---
 # Arguments: <yad_option>...
