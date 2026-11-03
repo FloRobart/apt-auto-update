@@ -3,7 +3,9 @@ Description=Vérification discrète des mises à jour (démarrage + tous les 7 j
 PartOf=graphical-session.target
 
 [Timer]
-OnStartupSec=2min
+# Only place where the delay before the first check after login is set:
+# it leaves time for the network and the desktop session to be ready
+OnStartupSec=1min
 OnUnitActiveSec=7d
 
 [Install]
